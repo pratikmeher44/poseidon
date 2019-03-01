@@ -481,6 +481,7 @@ func (pw *PodWatcher) podWorker() {
 							jd = pw.updateGangSchedulingrequireent(pod, jd)
 							jobIDToJD[jobID] = jd
 							jobNumTasksToRemove[jobID] = 0
+							JobDescList = append(JobDescList, jd)
 						}
 						jobNumTasksToRemove[jobID]++
 						taskCount := jobNumTasksToRemove[jobID]

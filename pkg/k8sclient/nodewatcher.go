@@ -34,6 +34,7 @@ import (
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
+	"github.com/kubernetes-sigs/poseidon/pkg/config"
 )
 
 // NewNodeWatcher initializes a NodeWatcher based on the given Kubernetes client and Firmament client.
@@ -259,6 +260,7 @@ func (nw *NodeWatcher) nodeWorker() {
 					NodeToRTND[node.Hostname] = rtnd
 					glog.Info(NodeToRTND, " in Nodedded")
 					ResIDToNode[rtnd.GetResourceDesc().GetUuid()] = node.Hostname
+
 					NodeMux.Unlock()
 					firmament.NodeAdded(nw.fc, rtnd)
 
@@ -352,6 +354,9 @@ func (nw *NodeWatcher) createResourceTopologyForNode(node *Node) *firmament.Reso
 	rtnd.ResourceDesc.Avoids = avoidPods
 
 	ResIDToNode[resUUID] = node.Hostname
+	if config.GetScheduleWithNodes() == true {
+	  ResIDToResDesc[resUUID] = rtnd.ResourceDesc
+        }
 	// TODO(ionel) Add annotations.
 	// Add labels.
 	for label, value := range node.Labels {

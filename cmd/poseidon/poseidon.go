@@ -36,13 +36,37 @@ const (
 	FirmamentHealthCheckTimeout  = 10 * time.Minute
 )
 
+func NodeSelector(labelselectors []*firmament.LabelSelector, labels []*firmament.Label) (bool, uint64) {
+	//var sumcost uint64 := 0
+	var labelMap map[string]string
+	for _, label := range labels {
+		labelMap[label.Key] = label.Value
+	}
+	for _, selector := range labelselectors {
+		for _, selectorval := range selector.Values {
+
+	  }
+	}
+	return false, 0
+}
+
 func schedule(fc firmament.FirmamentSchedulerClient) {
 
 	stopCh := make(chan struct{})
 	// start the bond od wokers
 	go k8sclient.BindPodWorkers(stopCh, config.GetBurst())
 	for {
+		k8sclient.PodMux.RLock()
+		for _, jd := range k8sclient.JobDescList {
+			for _, resDesc := range k8sclient.ResIDToResDesc {
+				res, cost := NodeSelector(jd.RootTask.LabelSelectors, resDesc.Labels)
+        if res {
+
+				}
+			}
+		}
 		deltas := firmament.Schedule(fc)
+		k8sclient.PodMux.RUnlock()
 
 		glog.Infof("Scheduler returned %d deltas", len(deltas.GetDeltas()))
 		if (len(deltas.GetUnscheduledTasks()) > 0) || (len(deltas.GetDeltas()) > 0) {

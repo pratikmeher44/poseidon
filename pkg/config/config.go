@@ -45,6 +45,7 @@ type poseidonConfig struct {
 	K8sQPS             float32 `json:"k8sQPS,omitempty"`
 	DefaultBehaviour   bool    `json:"defaultBehaviour,omitempty"`
 	DisableEvents      bool    `json:"disableEvents,omitempty"`
+	ScheduleWithNodes  bool    `json:"scheduleWithNodes,omitempty"`
 }
 
 // GetSchedulerName returns the SchedulerName from config
@@ -158,6 +159,10 @@ func GetDisableEvents() bool {
 	return config.DisableEvents
 }
 
+func GetScheduleWithNodes() bool {
+	return config.ScheduleWithNodes
+}
+
 // ReadFromCommandLineFlags reads command line flags and these will override poseidonConfig file flags.
 func ReadFromCommandLineFlags() {
 	pflag.StringVar(&config.SchedulerName, "schedulerName", "poseidon", "The scheduler name with which pods are labeled")
@@ -177,6 +182,7 @@ func ReadFromCommandLineFlags() {
 	pflag.IntVar(&config.K8sBurst, "k8sBurst", 500, "k8s clinet burst rate to configure")
 	pflag.BoolVar(&config.DefaultBehaviour, "defaultBehaviour", false, "Enable default scheduler behaviour")
 	pflag.BoolVar(&config.DisableEvents, "disableEvents", false, "Disable/Enable events from Poseidon")
+	pflag.BoolVar(&config.ScheduleWithNodes, "scheduleWithNodes", false, "Call Schedule from Poseidon with nodes filtered by predicates and priorities scores")
 
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 	pflag.Parse()

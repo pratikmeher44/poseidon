@@ -47,7 +47,9 @@ service FirmamentScheduler {
   rpc AddTaskInfo (TaskInfo) returns (TaskInfoResponse);
 }
 
-message ScheduleRequest {}
+message ScheduleRequest {
+  repeated NodeInfo nodes = 1;
+}
 
 message SchedulingDeltas {
   repeated SchedulingDelta deltas = 1;
@@ -170,4 +172,11 @@ enum TaskInfoReplyType {
 enum TaskInfoType{
   TASKINFO_ADD =0;
   TASKINFO_REMOVE=1;
+}
+
+// Each node info with scores and jobs that can be scheduled to it.
+message NodeInfo {
+  string resource_id = 1;
+  repeated string job_id = 2; // list of jobs
+  uint64 score = 3; // calculated priority score
 }

@@ -268,3 +268,6 @@ type K8sPodWatcher struct {
 	K8sPods    map[string]*firmament.TaskInfo
 	sync.Mutex
 }
+
+var ResIDToResDesc map[string]*firmament.ResourceDescriptor
+var JobDescList []*firmament.JobDescriptor
